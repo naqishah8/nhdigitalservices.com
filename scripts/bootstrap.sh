@@ -128,6 +128,7 @@ LimitCORE=infinity
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 Environment=PM2_HOME=/home/${APP_USER}/.pm2
 PIDFile=/home/${APP_USER}/.pm2/pm2.pid
+Restart=on-failure
 
 ExecStart=/usr/bin/pm2 resurrect
 ExecReload=/usr/bin/pm2 reload all
@@ -139,7 +140,18 @@ EOF
 
 systemctl daemon-reload
 systemctl enable "pm2-${APP_USER}" >/dev/null
-systemctl restart "pm2-${APP_USER}"
+
+# Kill the user-space PM2 daemon so systemd can fork a fresh one it owns.
+# The process list is already saved in dump.pm2 and `pm2 resurrect` will
+# respawn the nhds app when systemd starts the service.
+sudo -u "${APP_USER}" pm2 kill >/dev/null 2>&1 || true
+sleep 1
+
+if ! systemctl restart "pm2-${APP_USER}"; then
+  warn "systemd pm2 unit failed to start — bringing PM2 back up directly as ${APP_USER}"
+  sudo -u "${APP_USER}" bash -lc "cd '${APP_DIR}' && pm2 resurrect || pm2 start 'npm run start' --name ${APP_NAME} --time"
+  sudo -u "${APP_USER}" pm2 save >/dev/null 2>&1 || true
+fi
 
 log "Smoke-testing local app on 127.0.0.1:3000"
 sleep 2
