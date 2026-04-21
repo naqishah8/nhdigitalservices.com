@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Check } from 'lucide-react';
+import { Check, ArrowLeft } from 'lucide-react';
 import ServiceBackground from './ServiceBackground';
 
 export default function ServiceHero({ service }) {
@@ -17,14 +17,17 @@ export default function ServiceHero({ service }) {
             transition={{ duration: 0.7 }}
             className="hero-content"
           >
-            <Link href="/#services" className="back-link">
-              <span>&larr;</span> All Services
-            </Link>
-
-            <span className="service-eyebrow" style={{ color: service.color }}>
-              <service.icon size={16} />
-              <span>{service.title}</span>
-            </span>
+            <div className="breadcrumb">
+              <Link href="/#services" className="back-link">
+                <ArrowLeft size={14} strokeWidth={2.25} />
+                <span>All Services</span>
+              </Link>
+              <span className="breadcrumb-sep" aria-hidden="true">/</span>
+              <span className="service-eyebrow" style={{ color: service.color }}>
+                <service.icon size={14} />
+                <span>{service.title}</span>
+              </span>
+            </div>
 
             <h1>{service.tagline}</h1>
             <p className="description">{service.description}</p>
@@ -122,29 +125,53 @@ export default function ServiceHero({ service }) {
           align-items: center;
         }
 
+        .breadcrumb {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          line-height: 1;
+          margin-bottom: 24px;
+        }
+
         .back-link {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
           color: var(--text-muted);
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           font-weight: 500;
-          margin-bottom: 28px;
+          line-height: 1;
+        }
+
+        .back-link :global(svg) {
+          flex-shrink: 0;
         }
 
         .back-link:hover {
           color: white;
         }
 
+        .breadcrumb-sep {
+          color: var(--text-dim);
+          font-size: 0.85rem;
+          line-height: 1;
+          user-select: none;
+        }
+
         .service-eyebrow {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          font-size: 0.82rem;
+          gap: 6px;
+          font-size: 0.78rem;
           font-weight: 700;
           letter-spacing: 0.1em;
           text-transform: uppercase;
-          margin-bottom: 18px;
+          line-height: 1;
+        }
+
+        .service-eyebrow :global(svg) {
+          flex-shrink: 0;
         }
 
         h1 {

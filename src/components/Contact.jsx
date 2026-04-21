@@ -95,15 +95,35 @@ export default function Contact() {
 
     setStatus('sending');
 
-    const subject = encodeURIComponent(`New Inquiry: ${formData.service}`);
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nService: ${formData.service}\n\nMessage:\n${formData.message}`
-    );
-    window.location.href = `mailto:info@nhdigitalservices.com?subject=${subject}&body=${body}`;
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          service: formData.service,
+          message: formData.message,
+          website: formData.website,
+        }),
+      });
 
-    setStatus('sent');
-    setFormData({ name: '', email: '', service: 'Web Development', message: '', captcha: '', website: '' });
-    setChallenge(makeChallenge());
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setStatus('error');
+        setErrors({ captcha: data.error || 'Could not send — please try again.' });
+        setChallenge(makeChallenge());
+        setFormData((p) => ({ ...p, captcha: '' }));
+        return;
+      }
+
+      setStatus('sent');
+      setFormData({ name: '', email: '', service: 'Web Development', message: '', captcha: '', website: '' });
+      setChallenge(makeChallenge());
+    } catch (err) {
+      setStatus('error');
+      setErrors({ captcha: 'Network error — please try again.' });
+    }
   };
 
   return (
@@ -139,8 +159,8 @@ export default function Contact() {
             {status === 'sent' ? (
               <div className="success-msg">
                 <CheckCircle size={48} color="#10b981" />
-                <h3>Message Ready!</h3>
-                <p>Your email client should open with the message. If not, email us directly at info@nhdigitalservices.com</p>
+                <h3>Message sent!</h3>
+                <p>Thanks — we received your message and will get back to you within 24 hours.</p>
                 <button
                   type="button"
                   className="btn-primary"

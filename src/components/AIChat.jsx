@@ -230,7 +230,7 @@ export default function AIChat() {
               position: 'absolute',
               right: 0,
               bottom: 'calc(100% + 14px)',
-              width: 'min(300px, calc(100vw - 28px))',
+              width: 'min(340px, calc(100vw - 28px))',
               height: 'min(540px, calc(100vh - 120px))',
               background: '#ffffff',
               color: '#1f2937',
@@ -529,8 +529,8 @@ export default function AIChat() {
           position: absolute;
           right: 0;
           bottom: calc(100% + 14px);
-          /* Tight tower: narrow column, tall height (~1 : 2 ratio) */
-          width: 300px;
+          /* Tower column — slight widening for readability */
+          width: 340px;
           max-width: calc(100vw - 24px);
           height: min(560px, calc(100vh - 120px));
           display: flex;
@@ -870,7 +870,7 @@ export default function AIChat() {
           .chat-anchor { right: 14px; bottom: 14px; }
           .chat-window {
             /* Keep the tower shape on mobile — don't take the full screen. */
-            width: min(300px, calc(100vw - 28px));
+            width: min(340px, calc(100vw - 28px));
             height: min(520px, calc(100vh - 110px));
             right: 0;
           }

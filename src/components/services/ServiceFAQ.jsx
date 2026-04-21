@@ -86,9 +86,14 @@ function FAQItem({ question, answer, isOpen, onToggle, color, anchorId }) {
           color: var(--text-dim);
           display: inline-flex;
           align-items: center;
-          padding: 4px;
+          justify-content: center;
+          width: 0;
+          height: 22px;
+          padding: 0;
+          margin: 0;
+          overflow: hidden;
           border-radius: 6px;
-          transition: opacity 0.15s ease, color 0.15s ease;
+          transition: width 0.15s ease, padding 0.15s ease, opacity 0.15s ease, color 0.15s ease;
           flex-shrink: 0;
         }
 
@@ -96,6 +101,8 @@ function FAQItem({ question, answer, isOpen, onToggle, color, anchorId }) {
         .faq-item:focus-within .faq-link,
         .faq-link:focus-visible {
           opacity: 0.7;
+          width: 22px;
+          padding: 4px;
         }
 
         .faq-link:hover,
@@ -117,7 +124,9 @@ function FAQItem({ question, answer, isOpen, onToggle, color, anchorId }) {
           color: var(--text-muted);
           font-size: 0.95rem;
           line-height: 1.7;
-          padding-bottom: 24px;
+          margin: 0;
+          padding: 0 44px 24px 0;
+          max-width: 68ch;
         }
       `}</style>
     </div>
