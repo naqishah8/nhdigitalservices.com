@@ -99,7 +99,7 @@ export default function Contact() {
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\nService: ${formData.service}\n\nMessage:\n${formData.message}`
     );
-    window.location.href = `mailto:info@nhdigitalsolution.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:info@nhdigitalservices.com?subject=${subject}&body=${body}`;
 
     setStatus('sent');
     setFormData({ name: '', email: '', service: 'Web Development', message: '', captcha: '', website: '' });
@@ -131,7 +131,7 @@ export default function Contact() {
 
             <div className="direct-contact">
               <p>Email us directly:</p>
-              <a href="mailto:info@nhdigitalsolution.com">info@nhdigitalsolution.com</a>
+              <a href="mailto:info@nhdigitalservices.com">info@nhdigitalservices.com</a>
             </div>
           </div>
 
@@ -140,7 +140,7 @@ export default function Contact() {
               <div className="success-msg">
                 <CheckCircle size={48} color="#10b981" />
                 <h3>Message Ready!</h3>
-                <p>Your email client should open with the message. If not, email us directly at info@nhdigitalsolution.com</p>
+                <p>Your email client should open with the message. If not, email us directly at info@nhdigitalservices.com</p>
                 <button
                   type="button"
                   className="btn-primary"

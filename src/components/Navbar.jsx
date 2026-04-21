@@ -33,11 +33,11 @@ export default function Navbar() {
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`} aria-label="Main navigation">
       <div className="container">
-        <Link href="/" className="logo" aria-label="NH Digital Solution home">
+        <Link href="/" className="logo" aria-label="NH Digital Services home">
           <img src="/logo/icon.webp" alt="" className="logo-icon-img" width={40} height={40} />
           <span className="logo-text">
             <span className="logo-title">NH International</span>
-            <span className="logo-sub">Digital Solution</span>
+            <span className="logo-sub">Digital Services</span>
           </span>
         </Link>
 

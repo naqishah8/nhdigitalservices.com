@@ -141,23 +141,39 @@ export default function AIChat() {
     setInput('');
     setIsLoading(true);
 
+    // 30s client-side timeout so the composer never locks up forever
+    // if the upstream model stalls or the connection drops.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, history: messages }),
+        signal: controller.signal,
       });
       const data = await response.json();
       if (data.reply) {
         setMessages((prev) => [...prev, { role: 'assistant', content: data.reply, ts: nowLabel() }]);
+      } else {
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          content: 'I didn\'t catch that — could you rephrase? If this keeps happening, email info@nhdigitalservices.com.',
+          ts: nowLabel(),
+        }]);
       }
-    } catch {
+    } catch (err) {
+      const isAbort = err?.name === 'AbortError';
       setMessages((prev) => [...prev, {
         role: 'assistant',
-        content: 'Network hiccup — try again or email info@nhdigitalsolution.com.',
+        content: isAbort
+          ? 'That took too long — can you try again? If it happens twice in a row, email info@nhdigitalservices.com.'
+          : 'Network hiccup — try again or email info@nhdigitalservices.com.',
         ts: nowLabel(),
       }]);
     } finally {
+      clearTimeout(timeoutId);
       setIsLoading(false);
     }
   };

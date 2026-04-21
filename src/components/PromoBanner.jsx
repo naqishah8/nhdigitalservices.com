@@ -22,7 +22,7 @@ export default function PromoBanner() {
                 <Gift size={16} />
               </span>
               <span className="promo-text">
-                <strong>20% off your first project</strong>
+                <strong>Save 20% on your first project</strong>
                 <span className="divider">•</span>
                 <span className="extra">Free SEO audit + website demo</span>
               </span>

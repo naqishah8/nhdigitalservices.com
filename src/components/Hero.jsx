@@ -95,6 +95,7 @@ export default function Hero() {
         
         h1 span {
           color: #a855f7;
+          -webkit-text-fill-color: #a855f7;
           position: relative;
         }
         

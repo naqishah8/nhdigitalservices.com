@@ -34,7 +34,7 @@ const FAQS = [
   },
   {
     q: 'How do I get started?',
-    a: 'Book the free 30-minute intro call from the contact section below (or email info@nhdigitalsolution.com). We\'ll review your goals, point out quick wins, and send a proposal within 24 hours.',
+    a: 'Book the free 30-minute intro call from the contact section below (or email info@nhdigitalservices.com). We\'ll review your goals, point out quick wins, and send a proposal within 24 hours.',
   },
 ];
 

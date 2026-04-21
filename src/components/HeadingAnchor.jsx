@@ -59,23 +59,28 @@ export default function HeadingAnchor({
           position: relative;
         }
 
+        /* Icon has zero layout width when idle so centered headings stay
+           centered; it expands out on hover / focus. */
         .heading-anchor-link {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 1.6em;
+          width: 0;
           height: 1em;
-          margin-left: 6px;
+          margin-left: 0;
+          overflow: hidden;
           vertical-align: middle;
           color: var(--text-dim);
           opacity: 0;
           transform: translateY(1px);
-          transition: opacity 0.15s ease, color 0.15s ease;
+          transition: width 0.15s ease, margin-left 0.15s ease, opacity 0.15s ease, color 0.15s ease;
         }
 
         .heading-anchor:hover .heading-anchor-link,
         .heading-anchor:focus-within .heading-anchor-link,
         .heading-anchor-link:focus-visible {
+          width: 1.6em;
+          margin-left: 6px;
           opacity: 0.7;
         }
 

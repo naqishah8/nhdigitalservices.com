@@ -6,13 +6,13 @@
 
 export const COMPANY = {
   legalName: 'NH International LLC',
-  brand: 'NH Digital Solution',
+  brand: 'NH Digital Services',
   shortName: 'NH International',
   tagline: 'Premium Web, Design, SEO & App Development',
   description:
-    'NH Digital Solution (NH International LLC) is a senior studio building fast, high-converting websites, brand systems, mobile apps, SEO, social media, and logistics platforms.',
-  url: 'https://nhdigitalsolution.com',
-  email: 'info@nhdigitalsolution.com',
+    'NH Digital Services (NH International LLC) is a senior studio building fast, high-converting websites, brand systems, mobile apps, SEO, social media, and logistics platforms.',
+  url: 'https://nhdigitalservices.com',
+  email: 'info@nhdigitalservices.com',
   phone: '+1-201-534-1505',
   foundingDate: '2022',
 

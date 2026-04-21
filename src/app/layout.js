@@ -31,7 +31,7 @@ export const metadata = {
     'social media marketing', 'Instagram marketing',
     'app development', 'React Native', 'iOS app', 'Android app',
     'logistics software', 'supply chain platform',
-    'NH International', 'NH Digital Solution',
+    'NH International', 'NH Digital Services',
   ],
   alternates: {
     canonical: '/',

@@ -8,8 +8,8 @@ export default function Footer() {
       <div className="container">
         <div className="footer-top">
           <div className="footer-brand">
-            <Link href="/" className="logo" aria-label="NH Digital Solution home">
-              <img src="/logo/full-logo.webp" alt="NH Digital Solution" className="logo-full" width="288" height="58" />
+            <Link href="/" className="logo" aria-label="NH Digital Services home">
+              <img src="/logo/full-logo.webp" alt="NH Digital Services" className="logo-full" width="288" height="58" />
             </Link>
             <p>Elevating brands through premium digital craftsmanship. Your partner for modern innovation.</p>
           </div>

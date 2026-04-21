@@ -28,7 +28,7 @@ export default function ServiceCTA({ service }) {
             </p>
 
             <div className="cta-actions">
-              <a href="mailto:info@nhdigitalsolution.com" className="btn-primary">
+              <a href="mailto:info@nhdigitalservices.com" className="btn-primary">
                 Start the conversation <ArrowRight size={18} />
               </a>
               <a href="#faq" className="btn-ghost">
@@ -39,7 +39,7 @@ export default function ServiceCTA({ service }) {
             <div className="cta-meta">
               <div className="meta-item">
                 <Mail size={16} />
-                <span>info@nhdigitalsolution.com</span>
+                <span>info@nhdigitalservices.com</span>
               </div>
               <div className="meta-item">
                 <Clock size={16} />

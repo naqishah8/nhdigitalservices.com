@@ -39,9 +39,9 @@ function buildCatalog() {
 }
 
 const COMPANY_SNAPSHOT = `
-COMPANY: NH International — Digital Solution
-SITE: nhdigitalsolution.com
-EMAIL: info@nhdigitalsolution.com
+COMPANY: NH International — Digital Services
+SITE: nhdigitalservices.com
+EMAIL: info@nhdigitalservices.com
 POSITIONING: A senior, small studio. Design + engineering under one roof. Clients keep us for ongoing work because the team you meet is the team that builds.
 OFFERS (always current):
 - 20% discount on a first project
@@ -63,7 +63,7 @@ RULES OF ENGAGEMENT:
 5. Do NOT hard-sell. Only recommend a service when it actually solves the user's stated problem. Give them one clear next step, not a laundry list.
 6. If the user seems early-stage, exploring, or comparing options — help them think clearly first; book-a-call comes last.
 7. If the user is off-topic (weather, jokes, etc.), engage briefly and friendly, then gently steer back.
-8. If the user asks for a human, give them: info@nhdigitalsolution.com and the free consultation link idea.
+8. If the user asks for a human, give them: info@nhdigitalservices.com and the free consultation link idea.
 
 FORMAT:
 - Prefer plain sentences. You can use a short bulleted list (max 4 items) when enumerating concrete things (features, steps, trade-offs). Avoid headings.
@@ -89,7 +89,7 @@ ANSWER STRATEGY
 - Check if the question is about NH International → answer from the catalog, cite service name + slug if useful ("see /services/web-development").
 - If it's a general industry / how-does-X-work question → answer directly using what you know.
 - Never reply with "I can't help with that."
-- If you truly lack the fact, tell the user honestly and offer to connect them with a human via info@nhdigitalsolution.com.
+- If you truly lack the fact, tell the user honestly and offer to connect them with a human via info@nhdigitalservices.com.
 `;
 
 export async function POST(req) {
@@ -125,10 +125,18 @@ export async function POST(req) {
     const trimmedHistory = firstUserIdx === -1 ? [] : mapped.slice(firstUserIdx);
 
     const GEN_CONFIG = {
-      maxOutputTokens: 400,
+      maxOutputTokens: 800,
       temperature: 0.55,
       topP: 0.9,
     };
+
+    const withTimeout = (promise, ms) =>
+      Promise.race([
+        promise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error(`timeout after ${ms}ms`)), ms)
+        ),
+      ]);
 
     const attempt = async (modelName) => {
       const model = genAI.getGenerativeModel({
@@ -136,7 +144,7 @@ export async function POST(req) {
         systemInstruction: SYSTEM_INSTRUCTION,
       });
       const chat = model.startChat({ history: trimmedHistory, generationConfig: GEN_CONFIG });
-      const result = await chat.sendMessage(message);
+      const result = await withTimeout(chat.sendMessage(message), 25000);
       return result.response.text();
     };
 
@@ -155,7 +163,7 @@ export async function POST(req) {
       console.error("[chat] all fallbacks failed:", lastErr);
       return Response.json({
         reply:
-          "I'm overloaded at the moment. Give me another second — or email info@nhdigitalsolution.com and someone will jump in.",
+          "I'm overloaded at the moment. Give me another second — or email info@nhdigitalservices.com and someone will jump in.",
       });
     }
 
@@ -165,7 +173,7 @@ export async function POST(req) {
     return Response.json(
       {
         reply:
-          "I ran into a snag responding just now. Try again in a moment, or reach us at info@nhdigitalsolution.com.",
+          "I ran into a snag responding just now. Try again in a moment, or reach us at info@nhdigitalservices.com.",
       },
       { status: 200 }
     );
