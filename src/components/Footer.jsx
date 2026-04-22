@@ -142,14 +142,16 @@ export default function Footer() {
           margin: 0 0 20px;
         }
 
-        /* Explicit :link + :visited so the browser default "visited"
-           purple doesn't leak through on Careers / Privacy — those are
-           the only footer links that point to real pages, so they were
-           the only ones visibly changing color after a visit. */
-        .link-group a,
-        .link-group a:link,
-        .link-group a:visited,
-        .link-group a:active {
+        /* :global() because Next.js <Link> doesn't receive the
+           styled-jsx scope class — without this the anchors rendered by
+           <Link> (Careers, Privacy Policy, Solutions links) fall back
+           to unstyled defaults while the plain <a> siblings get the
+           scoped color. Also explicitly pinning :visited so a visited
+           Careers/Privacy link can't go browser-default purple. */
+        .link-group :global(a),
+        .link-group :global(a:link),
+        .link-group :global(a:visited),
+        .link-group :global(a:active) {
           display: block;
           color: #94a3b8;
           font-size: 0.9rem;
@@ -158,12 +160,12 @@ export default function Footer() {
           text-decoration: none;
         }
 
-        .link-group a + a {
+        .link-group :global(a + a) {
           margin-top: 4px;
         }
 
-        .link-group a:hover,
-        .link-group a:focus-visible {
+        .link-group :global(a:hover),
+        .link-group :global(a:focus-visible) {
           color: #a855f7;
         }
 
