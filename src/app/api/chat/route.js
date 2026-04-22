@@ -1,7 +1,14 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { servicesList } from "@/data/services";
+import { rateLimit, clientIp, tooManyRequests } from "@/lib/rate-limit";
+
+export const runtime = "nodejs";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+
+const MAX_BODY_BYTES = 48 * 1024; // 48 KB — covers a trimmed history + question
+const MAX_MESSAGE = 4000;
+const MAX_HISTORY_ITEMS = 40;
 
 // Build a compact, deterministic service catalog from the live data file so
 // Nova always speaks about what we actually sell on the site.
@@ -94,10 +101,34 @@ ANSWER STRATEGY
 
 export async function POST(req) {
   try {
-    const { message, history = [] } = await req.json();
+    // 30 messages per IP per minute — generous for real humans, painful for
+    // anyone trying to run up our Gemini bill.
+    const ip = clientIp(req);
+    const rl = rateLimit(`chat:${ip}`, 30, 60 * 1000);
+    if (!rl.ok) return tooManyRequests(rl, "You're sending messages too quickly. Give me a moment.");
+
+    const raw = await req.text();
+    if (raw.length > MAX_BODY_BYTES) {
+      return Response.json({ error: "Payload too large" }, { status: 413 });
+    }
+
+    let body;
+    try {
+      body = JSON.parse(raw);
+    } catch {
+      return Response.json({ error: "Invalid JSON" }, { status: 400 });
+    }
+
+    const { message, history = [] } = body || {};
 
     if (!message || typeof message !== "string") {
       return Response.json({ error: "Missing message" }, { status: 400 });
+    }
+    if (message.length > MAX_MESSAGE) {
+      return Response.json({ error: "Message too long" }, { status: 400 });
+    }
+    if (!Array.isArray(history) || history.length > MAX_HISTORY_ITEMS) {
+      return Response.json({ error: "Invalid history" }, { status: 400 });
     }
 
     if (!process.env.GEMINI_API_KEY) {

@@ -25,8 +25,8 @@ export default function Hero() {
             <span>Experiences</span> That <br />
             Drive Success.
           </h1>
-          <p>
-            Transform your brand with modern web development, creative design, 
+          <p className="hero-subtitle">
+            Transform your brand with modern web development, creative design,
             and data-driven SEO. Get the professional edge your business deserves.
           </p>
           
@@ -71,7 +71,7 @@ export default function Hero() {
         }
         
         .hero-content {
-          max-width: 650px;
+          max-width: 560px;
         }
         
         .badge {
@@ -104,6 +104,14 @@ export default function Hero() {
           color: #94a3b8;
           margin-bottom: 40px;
           line-height: 1.6;
+        }
+
+        /* Keep the tagline locked to ~3 lines on desktop so it doesn't
+           run under the rotating 3D wireframe on the right. Width roughly
+           tracks the character count that wraps cleanly at ~68-75 chars
+           per line given the 1.15rem font. */
+        .hero-subtitle {
+          max-width: 44ch;
         }
         
         .hero-btns {
@@ -155,6 +163,11 @@ export default function Hero() {
           }
           .hero-content {
             max-width: 100%;
+          }
+          .hero-subtitle {
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
           }
           .hero-btns {
             justify-content: center;

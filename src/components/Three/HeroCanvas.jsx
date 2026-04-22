@@ -38,7 +38,7 @@ function WireframeNet() {
       <group ref={innerRef}>
         <lineSegments>
           <edgesGeometry args={[innerGeo]} />
-          <lineBasicMaterial color="#60a5fa" transparent opacity={0.55} />
+          <lineBasicMaterial color="#6d28d9" transparent opacity={0.7} />
         </lineSegments>
       </group>
     </group>
@@ -55,7 +55,7 @@ export default function HeroCanvas() {
         <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={50} />
         <ambientLight intensity={0.6} />
         <pointLight position={[5, 5, 5]} color="#b879fb" intensity={1.2} />
-        <pointLight position={[-5, -3, 4]} color="#60a5fa" intensity={1} />
+        <pointLight position={[-5, -3, 4]} color="#6d28d9" intensity={1} />
         <WireframeNet />
       </Canvas>
       <style jsx>{`

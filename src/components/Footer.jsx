@@ -19,12 +19,16 @@ export default function Footer() {
               <h4>Solutions</h4>
               <Link href="/services/web-development">Web Development</Link>
               <Link href="/services/graphic-design">Graphic Design</Link>
-              <Link href="/services/seo-optimization">SEO & Marketing</Link>
+              <Link href="/services/seo-optimization">SEO Optimization</Link>
+              <Link href="/services/social-media-marketing">Social Media Marketing</Link>
               <Link href="/services/app-development">App Development</Link>
+              <Link href="/services/logistics">Logistics Solutions</Link>
             </div>
             <div className="link-group">
               <h4>Company</h4>
               <a href="/#about">About Us</a>
+              <a href="/#portfolio">Our Work</a>
+              <a href="/#testimonials">Reviews</a>
               <a href="/#contact">Contact</a>
               <Link href="/careers">Careers</Link>
               <Link href="/privacy">Privacy Policy</Link>
@@ -88,14 +92,15 @@ export default function Footer() {
         }
         
         .footer-top {
-          display: flex;
-          justify-content: space-between;
+          display: grid;
+          grid-template-columns: minmax(220px, 1.2fr) repeat(3, minmax(0, 1fr));
+          align-items: start;
           padding-bottom: 40px;
           border-bottom: 1px solid rgba(255, 255, 255, 0.05);
           margin-bottom: 28px;
-          gap: 60px;
+          gap: 48px;
         }
-        
+
         .footer-brand {
           max-width: 350px;
         }
@@ -120,23 +125,35 @@ export default function Footer() {
         }
         
         .footer-links {
-          display: flex;
-          gap: 80px;
+          display: contents;
         }
-        
+
+        .link-group {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          min-width: 0;
+        }
+
         .link-group h4 {
           color: white;
           font-size: 1rem;
-          margin-bottom: 20px;
+          line-height: 1.2;
+          margin: 0 0 20px;
         }
-        
+
         .link-group a {
           display: block;
           color: #94a3b8;
-          margin-bottom: 12px;
           font-size: 0.9rem;
+          line-height: 1.4;
+          padding: 4px 0;
         }
-        
+
+        .link-group a + a {
+          margin-top: 4px;
+        }
+
         .link-group a:hover {
           color: #a855f7;
         }
@@ -148,8 +165,8 @@ export default function Footer() {
         .contact-group p {
           color: #94a3b8;
           font-size: 0.9rem;
-          margin: 0 0 12px;
-          line-height: 1.6;
+          line-height: 1.5;
+          margin: 0 0 8px;
         }
 
         .contact-group .hours {
@@ -180,13 +197,21 @@ export default function Footer() {
           color: #a855f7;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 960px) {
           .footer-top {
-            flex-direction: column;
+            grid-template-columns: 1fr 1fr;
             gap: 40px;
           }
-          .footer-links {
-            gap: 40px;
+          .footer-brand {
+            grid-column: 1 / -1;
+            max-width: 100%;
+          }
+        }
+
+        @media (max-width: 560px) {
+          .footer-top {
+            grid-template-columns: 1fr;
+            gap: 32px;
           }
           .footer-bottom {
             flex-direction: column;

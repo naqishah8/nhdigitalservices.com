@@ -660,7 +660,7 @@ export default function AIChat() {
           display: flex;
           flex-direction: column;
           gap: 2px;
-          padding-right: 60px; /* reserve space for menu + close icons */
+          padding-right: 84px; /* reserve space for menu + close icons */
         }
 
         .brand-word {
@@ -712,19 +712,35 @@ export default function AIChat() {
         }
 
         /* Drop down from the 3-dots button itself so the position is
-           predictable regardless of header width. */
+           predictable regardless of header width. A small caret pins the
+           menu visually to the button so it reads as an anchored popover
+           rather than a floating panel. */
         .agent-menu {
           position: absolute;
-          top: calc(100% + 6px);
-          right: 0;
+          top: calc(100% + 10px);
+          right: -4px;
           background: white;
           color: #1f2937;
           border-radius: 14px;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
-          border: 1px solid #e5e7eb;
+          box-shadow: 0 18px 40px rgba(15, 23, 42, 0.28),
+                      0 2px 6px rgba(15, 23, 42, 0.08);
+          border: 1px solid rgba(15, 23, 42, 0.08);
           padding: 6px;
-          min-width: 210px;
-          z-index: 50;
+          min-width: 220px;
+          z-index: 100;
+        }
+
+        .agent-menu::before {
+          content: '';
+          position: absolute;
+          top: -6px;
+          right: 16px;
+          width: 12px;
+          height: 12px;
+          background: white;
+          border-top: 1px solid rgba(15, 23, 42, 0.08);
+          border-left: 1px solid rgba(15, 23, 42, 0.08);
+          transform: rotate(45deg);
         }
 
         .agent-menu button {
@@ -740,10 +756,16 @@ export default function AIChat() {
           border-radius: 10px;
           cursor: pointer;
           text-align: left;
+          position: relative;
+          z-index: 1;
         }
 
         .agent-menu button:hover {
           background: #f3f4f6;
+        }
+
+        .agent-menu button + button {
+          margin-top: 2px;
         }
 
         /* Body */

@@ -1,4 +1,7 @@
 import nodemailer from 'nodemailer';
+import { rateLimit, clientIp, tooManyRequests } from '@/lib/rate-limit';
+
+export const runtime = 'nodejs';
 
 // SMTP credentials live in env vars. The form submits through our own mail
 // server (Postfix on mail.nhdigitalservices.com:587, SASL-authed as the
@@ -9,6 +12,13 @@ const SMTP_USER = process.env.SMTP_USER || 'info';
 const SMTP_PASS = process.env.SMTP_PASS || '';
 const CONTACT_TO = process.env.CONTACT_TO || 'info@nhdigitalservices.com';
 const CONTACT_FROM = process.env.CONTACT_FROM || 'info@nhdigitalservices.com';
+
+// Field caps — protects the mail server from giant payloads and obvious abuse.
+const MAX_BODY_BYTES = 16 * 1024; // 16 KB is plenty for a contact form
+const MAX_NAME = 120;
+const MAX_EMAIL = 254; // RFC 5321
+const MAX_SERVICE = 80;
+const MAX_MESSAGE = 5000;
 
 const transporter = SMTP_PASS
   ? nodemailer.createTransport({
@@ -31,7 +41,26 @@ function escapeHtml(s) {
 
 export async function POST(req) {
   try {
-    const { name, email, service, message, website } = await req.json();
+    // Rate limit before we even parse the body — stops flood attempts cheaply.
+    // 5 submissions per IP per 10 min covers a user re-submitting after a typo
+    // but chokes spam bots that hammer the form.
+    const ip = clientIp(req);
+    const rl = rateLimit(`contact:${ip}`, 5, 10 * 60 * 1000);
+    if (!rl.ok) return tooManyRequests(rl);
+
+    const raw = await req.text();
+    if (raw.length > MAX_BODY_BYTES) {
+      return Response.json({ error: 'Payload too large' }, { status: 413 });
+    }
+
+    let body;
+    try {
+      body = JSON.parse(raw);
+    } catch {
+      return Response.json({ error: 'Invalid JSON' }, { status: 400 });
+    }
+
+    const { name, email, service, message, website } = body || {};
 
     // Honeypot — bots fill every field, so presence means drop silently.
     if (website) return Response.json({ ok: true });
@@ -39,8 +68,20 @@ export async function POST(req) {
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
+    if (
+      name.length > MAX_NAME ||
+      email.length > MAX_EMAIL ||
+      (service && service.length > MAX_SERVICE) ||
+      message.length > MAX_MESSAGE
+    ) {
+      return Response.json({ error: 'Field too long' }, { status: 400 });
+    }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return Response.json({ error: 'Invalid email' }, { status: 400 });
+    }
+    // Reject control chars / newlines sneaking into short fields (header injection).
+    if (/[\r\n\t\x00-\x1f]/.test(name) || /[\r\n\t\x00-\x1f]/.test(email)) {
+      return Response.json({ error: 'Invalid characters' }, { status: 400 });
     }
 
     if (!transporter) {
