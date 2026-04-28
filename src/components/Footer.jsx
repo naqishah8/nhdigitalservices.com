@@ -32,6 +32,7 @@ export default function Footer() {
               <a href="/#contact">Contact</a>
               <Link href="/careers">Careers</Link>
               <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/terms">Terms of Service</Link>
             </div>
             {/* NAP block — duplicated here for consistency with structured data */}
             <address className="link-group contact-group">

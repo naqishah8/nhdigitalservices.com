@@ -21,6 +21,7 @@ export default function sitemap() {
     { url: `${base}/#contact`, priority: 0.8, changeFrequency: 'monthly' },
     { url: `${base}/careers`, priority: 0.7, changeFrequency: 'weekly' },
     { url: `${base}/privacy`, priority: 0.3, changeFrequency: 'yearly' },
+    { url: `${base}/terms`, priority: 0.3, changeFrequency: 'yearly' },
   ];
 
   const serviceRoutes = serviceSlugs.map((slug) => ({
