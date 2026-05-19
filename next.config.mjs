@@ -10,6 +10,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const scriptSrc = [
   "'self'",
   "'unsafe-inline'",
+  'https://www.googletagmanager.com',
   ...(isDev ? ["'unsafe-eval'"] : []),
 ].join(' ');
 
@@ -21,8 +22,12 @@ const CSP = [
   `script-src ${scriptSrc}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com",
-  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://api.dicebear.com https://i.pravatar.cc https://randomuser.me",
-  "connect-src 'self'",
+  // www.google-analytics.com is added for GA4 tracking pixels.
+  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://api.dicebear.com https://i.pravatar.cc https://randomuser.me https://www.google-analytics.com",
+  // *.google-analytics.com covers the region-prefixed collect endpoints
+  // (e.g. region1.google-analytics.com); *.analytics.google.com is the
+  // newer GA4 server-side ingestion domain.
+  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   "media-src 'self'",
   "object-src 'none'",
   "worker-src 'self' blob:",
