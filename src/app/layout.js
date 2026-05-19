@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import ScrollBackground from "@/components/ScrollBackground";
 import AIChat from "@/components/AIChat";
 import BackToTop from "@/components/BackToTop";
+import CookieConsent from "@/components/CookieConsent";
+import Analytics from "@/components/Analytics";
 import { COMPANY, buildOrganizationSchema } from "@/data/company";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -102,6 +104,8 @@ export default function RootLayout({ children }) {
         <main id="main-content" style={{ position: 'relative', zIndex: 1 }}>{children}</main>
         <AIChat />
         <BackToTop />
+        <CookieConsent />
+        <Analytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}

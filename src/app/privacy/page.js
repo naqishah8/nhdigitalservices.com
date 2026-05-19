@@ -44,8 +44,10 @@ export default function PrivacyPolicyPage() {
             </li>
             <li>
               <strong>Cookies:</strong> we use a minimal set of first-party cookies required for the site to
-              function (e.g. to remember that you dismissed a notice). We do not use third-party advertising
-              cookies.
+              function (e.g. to remember that you dismissed a notice). With your consent, we also load{' '}
+              <strong>Google Analytics 4</strong>, which sets first-party cookies (such as <code>_ga</code>)
+              to measure aggregate, anonymised traffic. We do not use third-party advertising cookies. You
+              can decline analytics from the cookie banner at any time.
             </li>
           </ul>
         </section>

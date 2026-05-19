@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { Send, CheckCircle, Loader2, Shield } from 'lucide-react';
 import HeadingAnchor from './HeadingAnchor';
 
@@ -27,8 +27,13 @@ export default function Contact() {
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error
 
   // Regenerating the challenge per-mount (and on failed submit) makes it
-  // hard to hard-code a bot around a single answer.
-  const [challenge, setChallenge] = useState(() => makeChallenge());
+  // hard to hard-code a bot around a single answer. Generated on the client
+  // only — Math.random() in the initializer would mismatch between SSR and
+  // hydration and break the page.
+  const [challenge, setChallenge] = useState(null);
+  useEffect(() => {
+    setChallenge(makeChallenge());
+  }, []);
 
   // Track how long the user spent on the form. Real humans take at least a
   // couple of seconds; scripted submissions tend to fire within ms.
@@ -37,7 +42,7 @@ export default function Contact() {
   const minDwellMs = 2500; // 2.5s minimum
 
   const challengeLabel = useMemo(
-    () => `What is ${challenge.a} + ${challenge.b}?`,
+    () => (challenge ? `What is ${challenge.a} + ${challenge.b}?` : 'Loading challenge…'),
     [challenge]
   );
 
@@ -52,7 +57,9 @@ export default function Contact() {
     if (!formData.message.trim()) newErrors.message = 'Message is required';
 
     const parsed = Number(formData.captcha.trim());
-    if (!formData.captcha.trim()) {
+    if (!challenge) {
+      newErrors.captcha = 'Please wait a moment for the challenge to load.';
+    } else if (!formData.captcha.trim()) {
       newErrors.captcha = 'Please solve the challenge';
     } else if (!Number.isFinite(parsed) || parsed !== challenge.answer) {
       newErrors.captcha = 'That doesn\'t look right. Try again.';

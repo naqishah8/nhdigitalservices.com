@@ -64,8 +64,11 @@ export default function AIChat() {
   const [muted, setMuted] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [tipVisible, setTipVisible] = useState(false);
+  // Start with empty timestamps so SSR and the first client render match — we'll
+  // fill them in once mounted. nowLabel() in the initializer would call
+  // toLocaleTimeString on both sides and produce a hydration mismatch.
   const [messages, setMessages] = useState(() =>
-    GREETING.map((content) => ({ role: 'assistant', content, ts: nowLabel() }))
+    GREETING.map((content) => ({ role: 'assistant', content, ts: '' }))
   );
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -86,9 +89,12 @@ export default function AIChat() {
         if (Array.isArray(parsed) && parsed.length) {
           setMessages(parsed);
           setHasInteracted(parsed.some((m) => m.role === 'user'));
+          return;
         }
       }
     } catch {}
+    // No restored transcript — stamp the greeting messages now (client-side only).
+    setMessages((prev) => prev.map((m) => (m.ts ? m : { ...m, ts: nowLabel() })));
   }, []);
 
   // Show a greeting tooltip once per visitor after a short delay.
