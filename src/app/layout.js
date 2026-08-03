@@ -71,11 +71,9 @@ export const metadata = {
       'max-video-preview': -1,
     },
   },
-  icons: {
-    icon: [{ url: '/logo/icon.png', type: 'image/png' }],
-    shortcut: '/logo/icon.png',
-    apple: '/logo/icon.png',
-  },
+  // Icons are provided by the file conventions in app/ (favicon.ico, icon.png,
+  // apple-icon.png). Next.js auto-injects the correct <link> tags, so no manual
+  // icons block is needed here — keeping one would double up / conflict.
   category: 'technology',
   formatDetection: {
     email: false,

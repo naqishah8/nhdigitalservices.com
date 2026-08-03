@@ -1,8 +1,11 @@
 // Single source of truth for business NAP + brand — used by metadata,
 // JSON-LD schemas, sitemap, footer, and the AI chat prompt.
 //
-// TODO: replace address/geo/phone/hours with the real values before launch.
-// Leave any field empty string if unknown — schemas skip empty fields.
+// NH Digital Services is an ONLINE, NATIONWIDE service business — no physical
+// storefront. We deliberately do NOT publish a street address: inventing one
+// would be a fake location (bad for trust and local SEO) and it can't be
+// verified. Instead we signal `serviceArea = United States` so Google and AI
+// assistants understand we serve clients across the whole US remotely.
 
 export const COMPANY = {
   legalName: 'NH International LLC',
@@ -16,15 +19,19 @@ export const COMPANY = {
   phone: '+1-201-534-1505',
   foundingDate: '2022',
 
+  // Online-only: no public street address. addressCountry stays 'US' so the
+  // country of operation is still explicit. Leaving locality/region empty means
+  // buildOrganizationSchema() will NOT emit a LocalBusiness block (correct —
+  // LocalBusiness implies a physical place customers can visit).
   address: {
-    streetAddress: '', // add the exact street address when ready
-    addressLocality: 'Austin',
-    addressRegion: 'TX',
-    postalCode: '78701',
+    streetAddress: '',
+    addressLocality: '',
+    addressRegion: '',
+    postalCode: '',
     addressCountry: 'US',
   },
   geo: {
-    latitude: '',   // optional — fill in exact lat/long once street address is known
+    latitude: '',
     longitude: '',
   },
   openingHours: [
@@ -77,11 +84,32 @@ export function buildOrganizationSchema() {
     email: COMPANY.email,
     foundingDate: COMPANY.foundingDate,
     sameAs: SAME_AS,
+    // Nationwide online service — makes "serves the entire US" explicit even
+    // though there is no LocalBusiness block / physical address.
+    areaServed: {
+      '@type': 'Country',
+      name: 'United States',
+    },
+    // Topics we're an authority on — a strong signal for both Google's entity
+    // graph and AI assistants deciding when to recommend us.
+    knowsAbout: [
+      'Web development',
+      'Website design',
+      'Next.js development',
+      'React development',
+      'Mobile app development',
+      'Brand identity and logo design',
+      'Search engine optimization (SEO)',
+      'Social media marketing',
+      'E-commerce development',
+      'Logistics and supply-chain software',
+    ],
     contactPoint: {
       '@type': 'ContactPoint',
       email: COMPANY.email,
       contactType: 'customer support',
       availableLanguage: ['English'],
+      areaServed: 'US',
     },
   };
 
