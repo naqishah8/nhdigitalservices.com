@@ -1,5 +1,6 @@
 import { COMPANY } from '@/data/company';
 import { serviceSlugs } from '@/data/services';
+import { postsList } from '@/data/posts';
 import { getPublishedJobs } from '@/lib/jobs';
 
 // Regenerate on each request so freshly-posted jobs appear in the sitemap
@@ -19,6 +20,7 @@ export default function sitemap() {
     { url: `${base}/#testimonials`, priority: 0.6, changeFrequency: 'monthly' },
     { url: `${base}/#faq`, priority: 0.7, changeFrequency: 'monthly' },
     { url: `${base}/#contact`, priority: 0.8, changeFrequency: 'monthly' },
+    { url: `${base}/blog`, priority: 0.8, changeFrequency: 'weekly' },
     { url: `${base}/careers`, priority: 0.7, changeFrequency: 'weekly' },
     { url: `${base}/privacy`, priority: 0.3, changeFrequency: 'yearly' },
     { url: `${base}/terms`, priority: 0.3, changeFrequency: 'yearly' },
@@ -36,8 +38,17 @@ export default function sitemap() {
     changeFrequency: 'weekly',
   }));
 
-  return [...staticRoutes, ...serviceRoutes, ...jobRoutes].map((r) => ({
-    ...r,
+  // Posts carry their real publish/update date rather than `now` — a lastmod
+  // that changes on every crawl teaches Google to ignore the field entirely.
+  const postRoutes = postsList.map((post) => ({
+    url: `${base}/blog/${post.slug}`,
+    priority: 0.75,
+    changeFrequency: 'monthly',
+    lastModified: new Date(`${post.updated || post.date}T00:00:00Z`),
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...jobRoutes, ...postRoutes].map((r) => ({
     lastModified: now,
+    ...r,
   }));
 }

@@ -30,17 +30,19 @@ export default function Footer() {
               <a href="/#portfolio">Our Work</a>
               <a href="/#testimonials">Reviews</a>
               <a href="/#contact">Contact</a>
+              <Link href="/blog">Blog</Link>
               <Link href="/careers">Careers</Link>
               <Link href="/privacy">Privacy Policy</Link>
               <Link href="/terms">Terms of Service</Link>
             </div>
-            {/* NAP block — duplicated here for consistency with structured data */}
+            {/* NAP block — duplicated here for consistency with structured data.
+                We're an online nationwide business with no published street
+                address, so this states the service area rather than a location. */}
             <address className="link-group contact-group">
-              <h4>Visit or call</h4>
+              <h4>Contact</h4>
               <p>
-                {COMPANY.address.addressLocality}, {COMPANY.address.addressRegion}{' '}
-                {COMPANY.address.postalCode}
-                <br />USA
+                Online studio serving clients
+                <br />nationwide across the USA
               </p>
               <a href={`tel:${COMPANY.phone.replace(/[^+\d]/g, '')}`}>{COMPANY.phone}</a>
               <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
